@@ -2,6 +2,7 @@ package com.javaex.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -9,25 +10,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.javaex.dao.GuestbookDAO;
+import com.javaex.service.GuestbookService;
 import com.javaex.vo.GuestbookVO;
 
 @Controller
 public class GuestbookController {
 	//필드
+	@Autowired
+	private GuestbookService guestbookService;
 	
 	//생성자
 	
 	//메소드gs
 	
 	//메소드 일반
+	//-방명록 전체 리스트 가져오기
 	@RequestMapping(value= "/list", method = {RequestMethod.GET, RequestMethod.POST})
 	public String list(Model model) {
 		System.out.println("GuestbookController.list()");
 		
-		GuestbookDAO guestbookDAO = new GuestbookDAO();
+		//service
 		
+		//@AutoWired
+		//GuestbookService guestbookService= new GuestbookService();
+		
+		//guestbookService 메모리에 올려주세요
+		//주소 0x333 주입 해주세요
+		
+		
+		List<GuestbookVO> guestbookList = guestbookService.exeGetGuestbookList();
+		
+		/*
 		List<GuestbookVO> guestbookList = guestbookDAO.guestbookSelect();
 		System.out.println(guestbookList);
+		*/
 		
 		//*Model 개념
 		//Dispatcher Servlet(D.S)한테 request의 어트리뷰트 영역에
@@ -42,8 +58,9 @@ public class GuestbookController {
 	
 	@RequestMapping(value= "/add", method = {RequestMethod.GET, RequestMethod.POST})
 	public String add(@ModelAttribute GuestbookVO guestbookVO) {
-		System.out.println("GuestbookController.add()");
+		//System.out.println("GuestbookController.add()");
 		
+		System.out.println(guestbookVO);
 		//D.S야 !!!! request의 파라미터값을 꺼내서
 		//GuestbookVO로 묶어줘
 		/*
@@ -66,11 +83,14 @@ public class GuestbookController {
 		*url 파라미터 이름과 VO의 필드 이름을 같게 만든다
 		*/
 		
-		System.out.println(guestbookVO);
+		//GuestbookService guestbookService = new GuestbookService();
+		guestbookService.exeGuestbookAdd(guestbookVO);
+		
+		/*
 		GuestbookDAO guestbookDAO = new GuestbookDAO();
 		int count = guestbookDAO.guestbookInsert(guestbookVO);
 		System.out.println(count);
-		
+		*/
 		//리다이렉트 하는법 "redirect:" 앞쪽에 써준다.
 		//http://localhost:8888/guestbook4/list
 		return "redirect:/list";
@@ -103,7 +123,7 @@ public class GuestbookController {
 	//삭제폼 (삭제랑 헷갈리지 말자) 폼만 보여주면 됨
 	@RequestMapping(value = "/rform", method = {RequestMethod.GET, RequestMethod.POST})
 	public String removeForm() {
-		System.out.println("GuestbookController.removeForm()");
+		//System.out.println("GuestbookController.removeForm()");
 		
 		return "removeForm";
 	}
@@ -111,13 +131,17 @@ public class GuestbookController {
 	//삭제
 	@RequestMapping(value= "/remove", method= {RequestMethod.GET, RequestMethod.POST})
 	public String remove(@ModelAttribute GuestbookVO guestbookVO) {
-		System.out.println("GuestbookController.remove()");
+		//System.out.println("GuestbookController.remove()");
 		
 		//System.out.println(guestbookVO);
 		
+		//GuestbookService guestbookService = new GuestbookService();
+		guestbookService.exeGuestbookRemove(guestbookVO);
+		
+		/*
 		GuestbookDAO guestbookDAO = new GuestbookDAO();
 		int count = guestbookDAO.guestbookDelete(guestbookVO);
-		
+		*/
 		
 		
 		

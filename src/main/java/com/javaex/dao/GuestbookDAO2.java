@@ -14,11 +14,12 @@ import org.springframework.stereotype.Repository;
 import com.javaex.vo.GuestbookVO;
 
 @Repository
-public class GuestbookDAO {
+public class GuestbookDAO2 {
 
 	// 필드
 	@Autowired
 	private SqlSession sqlSession;
+	
 	// 0. import java.sql.*;
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
@@ -30,7 +31,7 @@ public class GuestbookDAO {
 	private String pw = "guestbook";
 
 
-	private void connect() {
+	private void getConnection() {
 		try {
 			// 1. JDBC 드라이버 (Oracle) 로딩
 			Class.forName(driver);
@@ -63,32 +64,85 @@ public class GuestbookDAO {
 		}
 	}
 
-	//전체데이터 가져오기
 	public List<GuestbookVO> guestbookSelect() {
-		System.out.println("GuestbookDAO.guestbookSelect()");
+		System.out.println("GuestbookDAO2.guestbookSelect()");
 		
 		//SqlSession sqlSession = new SqlSession();
 		List<GuestbookVO> guestbookList = sqlSession.selectList("guestbook.selectList");
-		
+		System.out.println("========================================");
+		System.out.println(guestbookList);
 		
 		return guestbookList;
 	}
 
-	//저장하기
+	
 	public int guestbookInsert(GuestbookVO guestbookVO) {
-		System.out.println("GuestbookDAO.guestbookInsert()");
+		int count = -1;
 		
-		int count = sqlSession.insert("guestbook.insert", guestbookVO);
+		this.getConnection();
+		
+		try {
+			
+			// 3. SQL문 준비 / 바인딩 / 실행
+			//SQL문 준비 
+			String query ="";
+			query += " insert into guestbook ";
+			query += " values (null, ?, ?, ?, now()) ";
+
+			//바인딩
+			pstmt = conn.prepareStatement(query);
+
+			pstmt.setString(1, guestbookVO.getName());
+			pstmt.setString(2, guestbookVO.getPassword());
+			pstmt.setString(3, guestbookVO.getContent());
+
+			//실행
+			count = pstmt.executeUpdate();
+
+			// 4.결과처리
+			System.out.println(count + "건 등록");
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+
+		this.close();
 		
 		return count;
 	}
 
 	
 	public int guestbookDelete(GuestbookVO guestbookVO) {
-		System.out.println("GuestbookDAO.guestbookDelete()");
+		int count = -1;
+
+		this.getConnection();
 		
-		int count = sqlSession.delete("guestbook.delete", guestbookVO);
+		try {
+
+			// 3. SQL문 준비 / 바인딩 / 실행
+			//SQL문 준비
+			String query = "";
+			query += " delete from guestbook ";
+			query += " where no= ?  ";
+			query += " and password= ?  ";		
+					
+			//바인딩
+			pstmt = conn.prepareStatement(query);
+
+			//실행
+			pstmt.setInt(1, guestbookVO.getNo());
+			pstmt.setString(2, guestbookVO.getPassword());
+
+			count = pstmt.executeUpdate();
+
+			// 4.결과처리
+			System.out.println(count + "건 삭제");
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		} 
 		
+		this.close();
 		
 		return count;
 	}
