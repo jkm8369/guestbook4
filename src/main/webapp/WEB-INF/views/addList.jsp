@@ -11,7 +11,7 @@
 		<title>Insert title here</title>
 	</head>
 	<body>
-		v01
+		v04
 		<form action="${pageContext.request.contextPath}/add" method = "get">
 			<table border="1" width="540px">
 				<tr>

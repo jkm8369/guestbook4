@@ -1,8 +1,8 @@
 name: Deploy WAR to EC2 Tomcat  # 자동화 작업 흐름 이름 (워크플로)
 
 on:
-  push:
-    branches: [ "master" ]  # master 브랜치에 push 될 때 실행됨
+  #push:
+  #  branches: [ "master" ]  # master 브랜치에 push 될 때 실행됨
 
   workflow_dispatch:        # 👉 GitHub 화면에서 수동으로 버튼 눌러 실행할 수 있게 해줌
   # 위 설정을 넣으면 GitHub Actions 탭에서 버튼 클릭하여 이 워크플로를 수동 실행 가능함
@@ -40,7 +40,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }}         # EC2 IP
         username: ${{ secrets.EC2_USER }}     # EC2 ID
-        key: ${{ secrets.EC2_SSH_KEY }}       # web.pem (SSH 접속용 키)
+        key: ${{ secrets.EC2_SSH_KEY }}       # web.pem (SSH 접속에 사용하는 키)
         script: |
           echo "[1] 기존 ROOT.war 및 ROOT 폴더 삭제"
           sudo rm -rf /usr/local/tomcat/webapps/ROOT.war     # 기존 ROOT.war 파일 삭제
