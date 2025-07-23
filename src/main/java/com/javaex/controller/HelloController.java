@@ -19,7 +19,7 @@ public class HelloController {
 	public String select() {
 		System.out.println("hello");
 		
-		return "/WEB-INF/views/hello.jsp";
+		return "hello";
 	}
 	
 	

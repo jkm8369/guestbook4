@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.javaex.dao.GuestbookDAO;
 import com.javaex.service.GuestbookService;
 import com.javaex.vo.GuestbookVO;
 
